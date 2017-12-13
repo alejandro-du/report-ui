@@ -5,7 +5,7 @@
     <groupId>org.vaadin.reports</groupId>
     <artifactId>report-ui</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <prerequisites>
         <maven>3</maven>
@@ -27,24 +27,22 @@
         <Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
     </properties>
 
-    <!--
-	<organization>
-		<name>My Name</name>
-		<url>https://github.com/mygithubaccount/MyComponent/</url>
-	</organization>
+    <organization>
+        <name>Alejandro Duarte</name>
+        <url>https://github.com/alejandro-du</url>
+    </organization>
 
 	<scm>
-		<url>git://github.com/mygithubaccount/MyComponent.git</url>
-		<connection>scm:git:git://github.com/mygithubaccount/MyComponent.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:/mygithubaccount/${componentClassName}.git</developerConnection>
-		<tag>MyComponent add-on for Vaadin</tag>
+		<url>git://github.com/alejandro-du/report-ui.git</url>
+		<connection>scm:git:git://github.com/alejandro-du/report-ui.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:/alejandro-du/report-ui.git</developerConnection>
+		<tag>Report UI Add-on for Vaadin</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/mygithubaccount/MyComponent/issues</url>
+		<url>https://github.com/alejandro-du/report-ui/issues</url>
 	</issueManagement>
-    -->
 
     <licenses>
         <license>
@@ -72,6 +70,12 @@
             <groupId>ar.com.fdvs</groupId>
             <artifactId>DynamicJasper</artifactId>
             <version>5.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.10-FINAL</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

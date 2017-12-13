@@ -1,1 +1,1 @@
-# Report UI add-on for Vaadin 8
+# Report UI Add-on for Vaadin 8

@@ -3,6 +3,7 @@ package org.vaadin.reports;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -27,12 +28,14 @@ public class JPAService {
         Random r = new Random(0);
 
         for (int i = 0; i < 100; i++) {
-            Person person = new Person();
-            person.setName(firstNames[r.nextInt(firstNames.length)] + " " + lastNames[r.nextInt(lastNames.length)]);
-            person.setPhoneNumber("+358 02 555 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
-            person.setCity(City.values()[r.nextInt(City.values().length)]);
-
-            PersonRepository.save(person);
+            Call call = new Call();
+            call.setClient(firstNames[r.nextInt(firstNames.length)] + " " + lastNames[r.nextInt(lastNames.length)]);
+            call.setPhoneNumber("555 01" + r.nextInt(10) + " " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
+            call.setCity(City.values()[r.nextInt(City.values().length)]);
+            call.setStartTime(LocalDateTime.now().minusDays(r.nextInt(15)).minusHours(r.nextInt(23)).minusMinutes(r.nextInt(59)).minusSeconds(59));
+            call.setDuration(r.nextInt(30 * 60));
+            call.setStatus(Status.values()[r.nextInt(Status.values().length)]);
+            CallRepository.save(call);
         }
     }
 
