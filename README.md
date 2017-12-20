@@ -1,6 +1,10 @@
-# Report UI Add-on for Vaadin 8
+# Report UI for Vaadin 8
 
-Report UI Add-on provides an easy way to render JasperReports in Vaadin applications through DynamicJasper.
+Report UI provides an easy way to render JasperReports in Vaadin applications through DynamicJasper.
+
+# Download
+
+Maven and ZIP download are available at <https://vaadin.com/directory/component/report-ui>
 
 # Basic usage
 Say, you have the following domain/entity/Java Bean class:
