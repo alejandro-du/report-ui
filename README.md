@@ -1,10 +1,4 @@
-# Report UI for Vaadin 8
-
-Report UI provides an easy way to render JasperReports in Vaadin applications through DynamicJasper.
-
-# Download
-
-Maven and ZIP download are available at <https://vaadin.com/directory/component/report-ui>
+Report UI Add-on provides an easy way to render JasperReports in Vaadin applications through DynamicJasper.
 
 # Basic usage
 Say, you have the following domain/entity/Java Bean class:
@@ -85,6 +79,8 @@ report.getReportBuilder()
 ```
 &nbsp;
 
+See the [DynamicJasper documentation](http://dynamicjasper.com/documentation-examples) for more configuration examples.
+
 You can make extend a component for downloading in several formats. For example, to make a button download a PDF file when clicked, you can use the following:
 ```java
 Button button = new Button("Pdf");
@@ -100,5 +96,13 @@ Apache POI is required when using some of the exporting methods:
     <version>3.10-FINAL</version>
 </dependency>
 ```
+&nbsp;
 
-See [DynamicJasper documentation](http://dynamicjasper.com/documentation-examples) for more configuration examples.
+In order to render charts you have to configure an `ImageServlet`. For example:
+```
+@WebServlet("/report-image")
+public static class ReportsImageServlet extends ImageServlet {
+}
+```
+
+You can configure the URL pattern using the `setImageServletPathPattern` method  (default to `report-image?image={0}`).
