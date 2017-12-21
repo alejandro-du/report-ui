@@ -5,19 +5,27 @@ import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.builders.GroupBuilder;
 import ar.com.fdvs.dj.domain.builders.StyleBuilder;
+import ar.com.fdvs.dj.domain.chart.builder.DJPieChartBuilder;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.SerializableSupplier;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
+import net.sf.jasperreports.j2ee.servlets.ImageServlet;
 import org.vaadin.jetty.VaadinJettyServer;
 
+import javax.servlet.annotation.WebServlet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,29 +35,59 @@ import java.util.List;
  */
 public class TestUI extends UI {
 
-    public static void main(String[] args) throws Exception {
-        JPAService.init();
-        new VaadinJettyServer(9090, TestUI.class).start();
+    @WebServlet("/report-image")
+    public static class ReportsImageServlet extends ImageServlet {
     }
 
-    private TabSheet tabs = new TabSheet();
+    @WebServlet(value = "/*", asyncSupported = true)
+    @VaadinServletConfiguration(ui = TestUI.class, productionMode = false)
+    public static class Chapter05VaadinServlet extends VaadinServlet {
+    }
+
+    public static void main(String[] args) throws Exception {
+        JPAService.init();
+        new VaadinJettyServer(9090, "target/test-classes").start();
+    }
+
+
+    private VerticalLayout menuLayout = new VerticalLayout();
+    private VerticalLayout reportContainer = new VerticalLayout();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        addBasicReport();
-        addConfiguredReport();
-        addDownloadableReport();
-        setContent(tabs);
+        Panel panel = new Panel(reportContainer);
+        panel.addStyleName(ValoTheme.PANEL_WELL);
+        panel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+
+        HorizontalSplitPanel mainLayout = new HorizontalSplitPanel(menuLayout, panel);
+        mainLayout.setSplitPosition(250, Unit.PIXELS);
+        setContent(mainLayout);
+
+        addReport("Simple report", () -> buildSimpleReport());
+        addReport("Configured report", () -> buildConfiguredReport());
+        addReport("Chart report", () -> buildChartReport());
+        addReport("Downloadable report", () -> buildDownloadableReport());
     }
 
-    private void addBasicReport() {
+    private void addReport(String name, SerializableSupplier<Component> reportSupplier) {
+        Button button = new Button(name, e -> {
+            reportContainer.removeAllComponents();
+            reportContainer.addComponent(reportSupplier.get());
+        });
+        button.addStyleName(ValoTheme.BUTTON_LINK);
+
+        menuLayout.addComponent(button);
+    }
+
+    private Component buildSimpleReport() {
         PrintPreviewReport<Call> report = new PrintPreviewReport<>(Call.class, "client", "city", "phoneNumber", "startTime", "duration", "status");
         report.setItems(CallRepository.findAll());
-        tabs.addTab(report, "Simple report");
+        return report;
     }
 
-    private void addConfiguredReport() {
+    private Component buildConfiguredReport() {
         Style headerStyle = new StyleBuilder(true).setFont(Font.ARIAL_MEDIUM).build();
+        Style groupStyle = new StyleBuilder(true).setFont(Font.ARIAL_MEDIUM_BOLD).build();
 
         AbstractColumn city;
 
@@ -64,6 +102,7 @@ public class TestUI extends UI {
                 .addColumn(city = ColumnBuilder.getNew()
                         .setColumnProperty("city", City.class)
                         .setTitle("City")
+                        .setStyle(groupStyle)
                         .build())
                 .addGroup(new GroupBuilder()
                         .setCriteriaColumn((PropertyColumn) city)
@@ -96,10 +135,34 @@ public class TestUI extends UI {
 
         report.setItems(CallRepository.findAll());
 
-        tabs.addTab(report, "Configured report");
+        return report;
     }
 
-    private void addDownloadableReport() {
+    private Component buildChartReport() {
+        AbstractColumn city;
+        AbstractColumn calls;
+        PrintPreviewReport<CityCallsCount> report = new PrintPreviewReport<>();
+        report.getReportBuilder()
+                .setTitle("Worldwide Distribution")
+                .addColumn(city = ColumnBuilder.getNew()
+                        .setColumnProperty("city", String.class)
+                        .setTitle("City")
+                        .build())
+                .addColumn(calls = ColumnBuilder.getNew()
+                        .setColumnProperty("calls", Integer.class)
+                        .setTitle("Calls")
+                        .build())
+                .addChart(new DJPieChartBuilder()
+                        .setColumnGroup((PropertyColumn) city)
+                        .addSerie(calls)
+                        .build());
+
+        report.setItems(CallRepository.getCountPerCity());
+
+        return report;
+    }
+
+    private Component buildDownloadableReport() {
         PrintPreviewReport<Call> report = new PrintPreviewReport<>(Call.class, "client", "city", "phoneNumber", "startTime", "duration", "status");
         SerializableSupplier<List<? extends Call>> itemsSupplier = () -> CallRepository.findAll();
         report.setItems(itemsSupplier.get());
@@ -133,7 +196,7 @@ public class TestUI extends UI {
         VerticalLayout layout = new VerticalLayout(buttons, report);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
 
-        tabs.addTab(layout, "Downloadable report");
+        return layout;
     }
 
 }

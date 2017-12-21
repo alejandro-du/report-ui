@@ -4,6 +4,7 @@ import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.ColumnProperty;
 import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
 import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
@@ -15,6 +16,7 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.SerializableFunction;
 import com.vaadin.server.SerializableSupplier;
 import com.vaadin.server.StreamResource;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Composite;
@@ -38,6 +40,8 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import net.sf.jasperreports.export.SimpleXmlExporterOutput;
+import net.sf.jasperreports.j2ee.servlets.ImageServlet;
+import net.sf.jasperreports.web.util.WebHtmlResourceHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -56,6 +60,7 @@ public class PrintPreviewReport<T> extends Composite {
     private JasperPrint print;
 
     private Label htmlLabel = new Label("", ContentMode.HTML);
+    private String imageServletPathPattern = "report-image?image={0}";
 
     public PrintPreviewReport() {
         VerticalLayout mainLayout = new VerticalLayout(htmlLabel);
@@ -83,6 +88,12 @@ public class PrintPreviewReport<T> extends Composite {
         }
     }
 
+    @Override
+    public void detach() {
+        super.detach();
+        VaadinSession.getCurrent().getSession().removeAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
+    }
+
     public void setItems(List<? extends T> items) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             if (report == null) {
@@ -92,7 +103,10 @@ public class PrintPreviewReport<T> extends Composite {
             print = buildJasperPrint(items, report);
             HtmlExporter exporter = buildHtmlExporter();
 
-            exporter.setExporterOutput(new SimpleHtmlExporterOutput(outputStream));
+            SimpleHtmlExporterOutput exporterOutput = new SimpleHtmlExporterOutput(outputStream);
+            exporterOutput.setImageHandler(new WebHtmlResourceHandler(imageServletPathPattern));
+
+            exporter.setExporterOutput(exporterOutput);
             exporter.setExporterInput(new SimpleExporterInput(print));
             exporter.exportReport();
             outputStream.flush();
@@ -141,6 +155,14 @@ public class PrintPreviewReport<T> extends Composite {
 
     public Label getHtmlLabel() {
         return htmlLabel;
+    }
+
+    public String getImageServletPathPattern() {
+        return imageServletPathPattern;
+    }
+
+    public void setImageServletPathPattern(String imageServletPathPattern) {
+        this.imageServletPathPattern = imageServletPathPattern;
     }
 
     protected void downloadOnClick(AbstractComponent component, String fileName, StreamResource.StreamSource streamSource) {
@@ -209,13 +231,15 @@ public class PrintPreviewReport<T> extends Composite {
     }
 
     protected DynamicReportBuilder buildReportBuilder() {
-        FastReportBuilder reportBuilder = new FastReportBuilder();
-        reportBuilder.setUseFullPageWidth(true);
-        return reportBuilder;
+        return new FastReportBuilder()
+                .setUseFullPageWidth(true)
+                .setWhenNoData("(no data)", new Style());
     }
 
     protected JasperPrint buildJasperPrint(List<? extends T> items, DynamicReport report) throws JRException {
-        return DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), items);
+        JasperPrint print = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), items);
+        VaadinSession.getCurrent().getSession().setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, print);
+        return print;
     }
 
     protected HtmlExporter buildHtmlExporter() {

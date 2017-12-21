@@ -17,4 +17,10 @@ public class CallRepository {
         return JPAService.runInTransaction(em -> em.merge(call));
     }
 
+    public static List<CityCallsCount> getCountPerCity() {
+        return JPAService.runInTransaction(em -> em.createNativeQuery(
+                "SELECT city, COUNT(id) calls FROM Call GROUP BY city ORDER BY city",
+                "CityCallsCountMapping").getResultList());
+    }
+
 }

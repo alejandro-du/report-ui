@@ -3,6 +3,8 @@ package org.vaadin.reports;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -22,12 +24,14 @@ public class Call {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     private City city;
 
     private LocalDateTime startTime;
 
     private Integer duration;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }
