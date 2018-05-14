@@ -85,10 +85,11 @@ report.getReportBuilder()
 
 See the [DynamicJasper documentation](http://dynamicjasper.com/documentation-examples) for more configuration examples.
 
-You can make extend a component for downloading in several formats. For example, to make a button download a PDF file when clicked, you can use the following:
+You can get a `StreamResource` for downloading the report in various formats. For example:
 ```java
-Button button = new Button("Pdf");
-report.downloadPdfOnClick(button, "call-report.pdf", itemsSupplier);
+StreamResource streamResource = report.getStreamResource(
+        "report.pdf", itemsSupplier, PrintPreviewReport.Format.PDF);
+Anchor pdf = new Anchor(streamResource, "Download PDF");
 ```
 &nbsp;
 
