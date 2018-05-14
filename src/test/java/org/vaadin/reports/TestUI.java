@@ -9,59 +9,46 @@ import ar.com.fdvs.dj.domain.chart.builder.DJPieChartBuilder;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
-import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.server.SerializableSupplier;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.splitlayout.SplitLayout;
+import com.vaadin.flow.function.SerializableSupplier;
+import com.vaadin.flow.router.Route;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
-import org.vaadin.jetty.VaadinJettyServer;
 
 import javax.servlet.annotation.WebServlet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Alejandro Duarte
  */
-public class TestUI extends UI {
+@Route("")
+public class TestUI extends SplitLayout {
 
     @WebServlet("/report-image")
     public static class ReportsImageServlet extends ImageServlet {
     }
 
-    @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(ui = TestUI.class, productionMode = false)
-    public static class Chapter05VaadinServlet extends VaadinServlet {
-    }
-
-    public static void main(String[] args) throws Exception {
-        JPAService.init();
-        new VaadinJettyServer(9090, "target/test-classes").start();
-    }
-
-
     private VerticalLayout menuLayout = new VerticalLayout();
     private VerticalLayout reportContainer = new VerticalLayout();
 
-    @Override
-    protected void init(VaadinRequest vaadinRequest) {
-        Panel panel = new Panel(reportContainer);
-        panel.addStyleName(ValoTheme.PANEL_WELL);
-        panel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+    public TestUI() {
+        JPAService.init();
 
-        HorizontalSplitPanel mainLayout = new HorizontalSplitPanel(menuLayout, panel);
-        mainLayout.setSplitPosition(250, Unit.PIXELS);
-        setContent(mainLayout);
+        reportContainer.getElement().setAttribute("theme", "");
+        Div div = new Div(reportContainer);
+
+        addToPrimary(menuLayout);
+        addToSecondary(div);
+        setSizeFull();
+        setSplitterPosition(30);
 
         addReport("Simple report", () -> buildSimpleReport());
         addReport("Configured report", () -> buildConfiguredReport());
@@ -71,12 +58,11 @@ public class TestUI extends UI {
 
     private void addReport(String name, SerializableSupplier<Component> reportSupplier) {
         Button button = new Button(name, e -> {
-            reportContainer.removeAllComponents();
-            reportContainer.addComponent(reportSupplier.get());
+            reportContainer.removeAll();
+            reportContainer.add(reportSupplier.get());
         });
-        button.addStyleName(ValoTheme.BUTTON_LINK);
-
-        menuLayout.addComponent(button);
+        button.getElement().setAttribute("theme", "tertiary");
+        menuLayout.add(button);
     }
 
     private Component buildSimpleReport() {
@@ -167,35 +153,16 @@ public class TestUI extends UI {
         SerializableSupplier<List<? extends Call>> itemsSupplier = () -> CallRepository.findAll();
         report.setItems(itemsSupplier.get());
 
-        Button pdf = new Button("Pdf");
-        report.downloadPdfOnClick(pdf, "call-report.pdf", itemsSupplier);
+        HorizontalLayout anchors = new HorizontalLayout();
 
-        Button xls = new Button("Xls");
-        report.downloadXlsOnClick(xls, "call-report.xls", itemsSupplier);
+        for (PrintPreviewReport.Format format : Arrays.asList(PrintPreviewReport.Format.values())) {
+            Anchor anchor = new Anchor(report.getStreamResource("call-report." + format.name().toLowerCase(), itemsSupplier, format), format.name());
+            anchor.getElement().setAttribute("download", true);
+            anchors.add(anchor);
+        }
 
-        Button docx = new Button("Docx");
-        report.downloadDocxOnClick(docx, "call-report.docx", itemsSupplier);
-
-        Button pptx = new Button("Pptx");
-        report.downloadPptxOnClick(pptx, "call-report.pptx", itemsSupplier);
-
-        Button rtf = new Button("Rtf");
-        report.downloadRtfOnClick(rtf, "call-report.rtf", itemsSupplier);
-
-        Button odt = new Button("Odt");
-        report.downloadOdtOnClick(odt, "call-report.odt", itemsSupplier);
-
-        Button csv = new Button("Csv");
-        report.downloadCsvOnClick(csv, "call-report.csv", itemsSupplier);
-
-        Button xml = new Button("Xml");
-        report.downloadXmlOnClick(xml, "call-report.xml", itemsSupplier);
-
-
-        HorizontalLayout buttons = new HorizontalLayout(pdf, xls, docx, pptx, rtf, odt, csv, xml);
-        VerticalLayout layout = new VerticalLayout(buttons, report);
-        layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
-
+        VerticalLayout layout = new VerticalLayout(anchors, report);
+        layout.getElement().setAttribute("theme", "spacing");
         return layout;
     }
 
