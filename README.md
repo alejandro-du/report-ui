@@ -1,5 +1,5 @@
-[![Published on vaadin.com/directory](https://img.shields.io/vaadin-directory/status/report-ui.svg)](https://img.shields.io/vaadin-directory/status/report-ui.svg)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/report-ui.svg)](https://img.shields.io/vaadin-directory/star/report-ui.svg)
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/report-ui)
+[![Stars on Vaadin Directory](https://img.shields.io/vaadin-directory/star/report-ui.svg)](https://vaadin.com/directory/component/report-ui)
 [![Latest version on vaadin.com/directory](https://img.shields.io/vaadin-directory/v/report-ui.svg)](https://img.shields.io/vaadin-directory/v/report-ui.svg)
 
 Report UI Add-on provides an easy way to render JasperReports in Vaadin applications through DynamicJasper.
