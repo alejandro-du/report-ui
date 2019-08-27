@@ -5,14 +5,14 @@
     <groupId>org.vaadin.reports</groupId>
     <artifactId>report-ui</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.1</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <prerequisites>
         <maven>3</maven>
     </prerequisites>
 
     <properties>
-        <vaadin.version>12.0.3</vaadin.version>
+        <vaadin.version>14.0.2</vaadin.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -147,9 +147,21 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.11.v20180605</version>
+                <version>9.4.15.v20190215</version>
                 <configuration>
                     <useTestScope>true</useTestScope>
                     <supportedPackagings>
