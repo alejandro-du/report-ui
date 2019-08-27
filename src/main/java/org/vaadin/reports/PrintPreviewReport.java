@@ -18,6 +18,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanPropertySet;
 import com.vaadin.flow.data.binder.PropertyDefinition;
 import com.vaadin.flow.data.binder.PropertySet;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.server.StreamResource;
@@ -39,6 +41,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Alejandro Duarte
@@ -135,6 +138,10 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
         } catch (JRException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setDataProvider(DataProvider<T, ?> dataProvider) {
+        setItems(dataProvider.fetch(new Query<>()).collect(Collectors.toList()));
     }
 
     public StreamResource getStreamResource(String fileName, SerializableSupplier<List<? extends T>> itemsSupplier, Format format) {
