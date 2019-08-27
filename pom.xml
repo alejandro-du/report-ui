@@ -5,7 +5,7 @@
     <groupId>org.vaadin.reports</groupId>
     <artifactId>report-ui</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
 
     <prerequisites>
         <maven>3</maven>
