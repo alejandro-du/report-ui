@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class DemoUtils {
 
-    public static String getNameAsPhrase(Class clazz) {
+    public static String getViewName(Class clazz) {
         String lowerCase = StringUtils.join(
                 StringUtils.splitByCharacterTypeCamelCase(clazz.getSimpleName()),
                 " "

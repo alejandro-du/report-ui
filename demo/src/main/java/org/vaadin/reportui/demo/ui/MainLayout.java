@@ -52,7 +52,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, AfterN
     }
 
     private void addTab(Class<? extends HasComponents> clazz) {
-        Tab tab = new Tab(DemoUtils.getNameAsPhrase(clazz));
+        Tab tab = new Tab(DemoUtils.getViewName(clazz));
         tabs.add(tab);
         tabToView.put(tab, clazz);
         viewToTab.put(clazz, tab);
