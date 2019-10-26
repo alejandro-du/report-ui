@@ -1,4 +1,4 @@
-package org.vaadin.reportui.demo.ui;
+package org.vaadin.reportui.demo.ui.view;
 
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.chart.builder.DJPieChartBuilder;
@@ -11,6 +11,7 @@ import org.vaadin.reports.PrintPreviewReport;
 import org.vaadin.reportui.demo.domain.CallRepository;
 import org.vaadin.reportui.demo.domain.City;
 import org.vaadin.reportui.demo.domain.CityCallsCount;
+import org.vaadin.reportui.demo.ui.MainLayout;
 
 import javax.servlet.annotation.WebServlet;
 

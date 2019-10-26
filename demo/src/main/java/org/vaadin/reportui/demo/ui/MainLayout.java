@@ -14,14 +14,17 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.PageConfigurator;
 import org.vaadin.reportui.demo.DemoUtils;
+import org.vaadin.reportui.demo.ui.view.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @PWA(name = "Report-ui add-on demo", shortName = "Report-ui demo")
-public class MainLayout extends AppLayout implements BeforeEnterObserver, AfterNavigationObserver {
+public class MainLayout extends AppLayout implements BeforeEnterObserver, AfterNavigationObserver, PageConfigurator {
 
     private Tabs tabs = new Tabs();
     private Map<Tab, Class<? extends HasComponents>> tabToView = new HashMap<>();
@@ -60,18 +63,37 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, AfterN
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        selectTabByCurrentView(event);
+    }
+
+    public void selectTabByCurrentView(BeforeEnterEvent event) {
         Class<?> viewClass = event.getNavigationTarget();
         tabs.setSelectedTab(viewToTab.get(viewClass));
     }
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
+        updatePageTitle();
+        addSourceCodeAnchorToCurrentView();
+    }
+
+    public void updatePageTitle() {
+        Class<? extends HasComponents> viewClass = tabToView.get(tabs.getSelectedTab());
+        UI.getCurrent().getPage().setTitle(DemoUtils.getViewName(viewClass) + " - " + "Report-ui add-on demo");
+    }
+
+    public void addSourceCodeAnchorToCurrentView() {
         Class<? extends HasComponents> viewClass = tabToView.get(tabs.getSelectedTab());
         if (!HomeView.class.equals(viewClass)) {
             HorizontalLayout footer = new HorizontalLayout(new Anchor(DemoUtils.getGitHubLink(viewClass), "Source code"));
             footer.setMargin(true);
             ((HasComponents) getContent()).add(footer);
         }
+    }
+
+    @Override
+    public void configurePage(InitialPageSettings settings) {
+        updatePageTitle();
     }
 
 }

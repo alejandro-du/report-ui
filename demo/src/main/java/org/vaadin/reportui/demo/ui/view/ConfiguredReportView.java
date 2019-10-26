@@ -1,4 +1,4 @@
-package org.vaadin.reportui.demo.ui;
+package org.vaadin.reportui.demo.ui.view;
 
 import ar.com.fdvs.dj.domain.AutoText;
 import ar.com.fdvs.dj.domain.Style;
@@ -16,6 +16,7 @@ import org.vaadin.reportui.demo.domain.Call;
 import org.vaadin.reportui.demo.domain.CallRepository;
 import org.vaadin.reportui.demo.domain.City;
 import org.vaadin.reportui.demo.domain.Status;
+import org.vaadin.reportui.demo.ui.MainLayout;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
