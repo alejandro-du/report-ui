@@ -12,7 +12,7 @@ import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Html;
-import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanPropertySet;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 /**
  * @author Alejandro Duarte
  */
-@StyleSheet("./css/report-ui-styles.css")
+@CssImport("./css/report-ui-styles.css")
 public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
 
     public enum Format {
