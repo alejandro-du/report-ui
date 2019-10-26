@@ -11,7 +11,6 @@ import org.vaadin.reportui.demo.domain.Call;
 import org.vaadin.reportui.demo.domain.CallRepository;
 import org.vaadin.reportui.demo.ui.MainLayout;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Route(value = "downloadable", layout = MainLayout.class)
@@ -24,7 +23,7 @@ public class DownloadableReportView extends VerticalLayout {
 
         HorizontalLayout anchors = new HorizontalLayout();
 
-        for (PrintPreviewReport.Format format : Arrays.asList(PrintPreviewReport.Format.values())) {
+        for (PrintPreviewReport.Format format : PrintPreviewReport.Format.values()) {
             Anchor anchor = new Anchor(report.getStreamResource("call-report." + format.name().toLowerCase(), itemsSupplier, format), format.name());
             anchor.getElement().setAttribute("download", true);
             anchors.add(anchor);
