@@ -1,4 +1,4 @@
-package org.vaadin.reportui.demo;
+package org.vaadin.reportui.demo.domain;
 
 import java.util.Objects;
 

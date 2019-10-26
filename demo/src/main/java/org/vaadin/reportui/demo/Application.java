@@ -7,6 +7,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.vaadin.reportui.demo.domain.Call;
+import org.vaadin.reportui.demo.domain.CallRepository;
+import org.vaadin.reportui.demo.domain.City;
+import org.vaadin.reportui.demo.domain.Status;
 
 import java.time.LocalDateTime;
 import java.util.Random;

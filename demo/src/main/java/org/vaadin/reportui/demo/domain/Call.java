@@ -1,4 +1,4 @@
-package org.vaadin.reportui.demo;
+package org.vaadin.reportui.demo.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

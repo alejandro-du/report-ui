@@ -1,4 +1,4 @@
-package org.vaadin.reportui.demo;
+package org.vaadin.reportui.demo.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CallRepository extends JpaRepository<Call, Long> {
 
-    @Query("select new org.vaadin.reportui.demo.CityCallsCount(city, count(id)) from Call GROUP BY city ORDER BY city")
+    @Query("select new org.vaadin.reportui.demo.domain.CityCallsCount(city, count(id)) from Call GROUP BY city ORDER BY city")
     List<CityCallsCount> getCountPerCity();
 
 }
