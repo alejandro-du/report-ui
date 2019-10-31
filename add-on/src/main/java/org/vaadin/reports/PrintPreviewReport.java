@@ -13,6 +13,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanPropertySet;
 import com.vaadin.flow.data.binder.PropertyDefinition;
@@ -128,6 +129,7 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
 
             mainLayout.removeAll();
             mainLayout.add(htmlContainer);
+            mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
         } catch (JRException | IOException e) {
             throw new RuntimeException(e);
