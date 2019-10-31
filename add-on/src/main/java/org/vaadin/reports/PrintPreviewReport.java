@@ -10,7 +10,6 @@ import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
 import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -68,12 +67,13 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
         }
     }
 
+    public static final String DEFAULT_SERVLET_PATH = "/report-image";
+    protected String imageServletPathPattern = "report-image?image={0}";
     protected VerticalLayout mainLayout = new VerticalLayout();
     protected DynamicReportBuilder reportBuilder;
     protected DynamicReport report;
     protected JasperPrint print;
 
-    private String imageServletPathPattern = "report-image?image={0}";
 
     public PrintPreviewReport() {
         reportBuilder = buildReportBuilder();
@@ -103,12 +103,6 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
         mainLayout.setMargin(false);
         mainLayout.addClassName(PrintPreviewReport.class.getSimpleName() + "-mainLayout");
         return mainLayout;
-    }
-
-    @Override
-    protected void onDetach(DetachEvent detachEvent) {
-        super.onDetach(detachEvent);
-        VaadinSession.getCurrent().getSession().removeAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
     }
 
     public void setItems(List<? extends T> items) {

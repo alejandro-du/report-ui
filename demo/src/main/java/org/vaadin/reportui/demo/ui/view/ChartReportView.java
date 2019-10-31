@@ -18,7 +18,7 @@ import javax.servlet.annotation.WebServlet;
 @Route(value = "chart", layout = MainLayout.class)
 public class ChartReportView extends VerticalLayout {
 
-    @WebServlet(value = "/report-image")
+    @WebServlet(value = PrintPreviewReport.DEFAULT_SERVLET_PATH)
     public static class ReportsImageServlet extends ImageServlet {
     }
 
