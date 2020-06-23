@@ -149,16 +149,22 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
         setItems(items);
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            JRAbstractExporter exporter = exporterSupplier.get();
-            exporter.setExporterOutput(exporterOutputFunction.apply(outputStream));
-            exporter.setExporterInput(new SimpleExporterInput(print));
-            exporter.exportReport();
-            outputStream.flush();
+            return new StreamResource(fileName, () -> {
+                try {
+                    JRAbstractExporter exporter = exporterSupplier.get();
+                    exporter.setExporterOutput(exporterOutputFunction.apply(outputStream));
+                    exporter.setExporterInput(new SimpleExporterInput(print));
+                    exporter.exportReport();
+                    outputStream.flush();
+                } catch (JRException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+                byte[] bytes = outputStream.toByteArray();
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                return inputStream;
+            });
 
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-            return new StreamResource(fileName, () -> inputStream);
-
-        } catch (JRException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
