@@ -123,7 +123,7 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
             exporter.exportReport();
             outputStream.flush();
 
-            Html htmlContent = new Html(outputStream.toString(StandardCharsets.UTF_8.name()));
+            Html htmlContent = new Html("<span>" + outputStream.toString(StandardCharsets.UTF_8.name()) + "</span>");
             Div htmlContainer = new Div(htmlContent);
             htmlContainer.addClassName(PrintPreviewReport.class.getSimpleName() + "-htmlContainer");
 
