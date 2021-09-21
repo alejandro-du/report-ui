@@ -6,14 +6,14 @@
     <groupId>org.vaadin.reportui</groupId>
     <artifactId>report-ui</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.3</version>
 
     <prerequisites>
         <maven>3</maven>
     </prerequisites>
 
     <properties>
-        <vaadin.version>14.2.1</vaadin.version>
+        <vaadin.version>14.7.0</vaadin.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -55,12 +55,6 @@
             <id>Vaadin prereleases</id>
             <url>http://maven.vaadin.com/vaadin-prereleases</url>
         </repository>
-        <!-- The bintray repository contain webjars immediately after generation. If the webjar is available
-             in Maven central, you do not need this repository -->
-        <repository>
-            <id>webjars</id>
-            <url>https://dl.bintray.com/webjars/maven</url>
-        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -93,7 +87,7 @@
         <dependency>
             <groupId>ar.com.fdvs</groupId>
             <artifactId>DynamicJasper</artifactId>
-            <version>5.1.2</version>
+            <version>5.3.2</version>
         </dependency>
     </dependencies>
 
