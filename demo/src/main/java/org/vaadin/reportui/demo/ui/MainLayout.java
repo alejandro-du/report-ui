@@ -15,7 +15,6 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
 import org.vaadin.reportui.demo.DemoUtils;
 import org.vaadin.reportui.demo.ui.view.*;
@@ -23,7 +22,6 @@ import org.vaadin.reportui.demo.ui.view.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@PWA(name = "Report-ui add-on demo", shortName = "Report-ui demo")
 public class MainLayout extends AppLayout implements BeforeEnterObserver, AfterNavigationObserver, PageConfigurator {
 
     private Tabs tabs = new Tabs();
