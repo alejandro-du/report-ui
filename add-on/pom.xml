@@ -6,7 +6,7 @@
     <groupId>org.vaadin.reportui</groupId>
     <artifactId>report-ui</artifactId>
     <packaging>jar</packaging>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
 
     <properties>
         <vaadin.version>21.0.3</vaadin.version>
@@ -106,6 +106,9 @@
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                         </manifestEntries>
                     </archive>
+                    <excludes>
+                        <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
