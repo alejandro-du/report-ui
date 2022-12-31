@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.export.ooxml.JRPptxExporter;
 import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
 import net.sf.jasperreports.web.util.WebHtmlResourceHandler;
+import org.jsoup.Jsoup;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -123,7 +124,9 @@ public class PrintPreviewReport<T> extends Composite<VerticalLayout> {
             exporter.exportReport();
             outputStream.flush();
 
-            Html htmlContent = new Html("<span>" + outputStream.toString(StandardCharsets.UTF_8.name()) + "</span>");
+            Html htmlContent = new Html(Jsoup.parse(outputStream.toString(StandardCharsets.UTF_8.name())).body().html());
+            //for v23 changes in  vaadin HTML class
+            //Html htmlContent = new Html("<span>" + outputStream.toString(StandardCharsets.UTF_8.name()) + "</span>");
             Div htmlContainer = new Div(htmlContent);
             htmlContainer.addClassName(PrintPreviewReport.class.getSimpleName() + "-htmlContainer");
 
